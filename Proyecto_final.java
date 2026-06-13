@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 // Clase para ingresar los datos
 class IngresarDatos {
@@ -233,6 +234,73 @@ public class Proyecto_final {
         }
     }
 
+    // OPCION 12 - GRAFO CON LISTA DE ADYACENCIA
+    public static ArrayList<ArrayList<Integer>> crearGrafoLista(Scanner sc, int vertices, int aristas) {
+        // Crear lista de adyacencia
+        ArrayList<ArrayList<Integer>> grafo = new ArrayList<>();
+        
+        // Crear listas vacías para cada vértice
+        for (int i = 0; i < vertices; i++) {
+            grafo.add(new ArrayList<>());
+        }
+        
+        // Agregar aristas
+        for (int i = 0; i < aristas; i++) {
+            System.out.println("\nArista #" + (i + 1));
+            int origen = leerEnteroMenu(sc, "Vértice de origen: ");
+            int destino = leerEnteroMenu(sc, "Vértice de destino: ");
+            
+            // Validar que los vértices existan
+            if (origen >= 0 && origen < vertices && destino >= 0 && destino < vertices) {
+                // Agregar arista en ambos sentidos (grafo no dirigido)
+                if (!grafo.get(origen).contains(destino)) {
+                    grafo.get(origen).add(destino);
+                    grafo.get(destino).add(origen);
+                    System.out.println("Arista " + origen + " - " + destino + " agregada.");
+                } else {
+                    System.out.println("Esta arista ya existe.");
+                    i--; // Repetir esta iteración
+                }
+            } else {
+                System.out.println("Vértice inválido. Los vértices van del 0 al " + (vertices - 1));
+                i--; // Repetir esta iteración
+            }
+        }
+        
+        return grafo;
+    }
+    
+    // OPCION 13 - GRAFO CON MATRIZ DE ADYACENCIA
+    public static int[][] crearGrafoMatriz(Scanner sc, int vertices, int aristas) {
+        // Inicializar matriz con ceros
+        int[][] matriz = new int[vertices][vertices];
+        
+        // Agregar aristas
+        for (int i = 0; i < aristas; i++) {
+            System.out.println("\nArista #" + (i + 1));
+            int origen = leerEnteroMenu(sc, "Vértice de origen: ");
+            int destino = leerEnteroMenu(sc, "Vértice de destino: ");
+            
+            // Validar que los vértices existan
+            if (origen >= 0 && origen < vertices && destino >= 0 && destino < vertices) {
+                // Agregar arista en ambos sentidos (grafo no dirigido)
+                if (matriz[origen][destino] == 0) {
+                    matriz[origen][destino] = 1;
+                    matriz[destino][origen] = 1;
+                    System.out.println("Arista " + origen + " - " + destino + " agregada.");
+                } else {
+                    System.out.println("Esta arista ya existe.");
+                    i--; // Repetir esta iteración
+                }
+            } else {
+                System.out.println("Vértice inválido. Los vértices van del 0 al " + (vertices - 1));
+                i--; // Repetir esta iteración
+            }
+        }
+        
+        return matriz;
+    }
+
     private static int leerEnteroMenu(Scanner sc, String mensaje) {
         System.out.print(mensaje);
         while (!sc.hasNextInt()) {
@@ -249,7 +317,7 @@ public class Proyecto_final {
         int opcion = 0;
         int[] lista;
         
-        System.out.println("====== Métodos de búsqueda y ordenamiento ======");
+        System.out.println("====== Métodos de búsqueda, ordenamiento y grafos ======");
 
         do {
             System.out.println("\n--- Menú ---");
@@ -262,7 +330,11 @@ public class Proyecto_final {
             System.out.println("7) Radixsort");
             System.out.println("8) Intercalación");
             System.out.println("9) Mezcla directa");
-            System.out.println("10) Salir");
+            System.out.println("10) Opción en desarrollo ;3");
+            System.out.println("11) Opción en desarrollo también ;3");
+            System.out.println("12) Grafo con Lista de Adyacencia");
+            System.out.println("13) Grafo con Matriz de Adyacencia");
+            System.out.println("14) Salir");
             System.out.print("Seleccione una opción: ");
 
             if (sc.hasNextInt()) {
@@ -399,6 +471,92 @@ public class Proyecto_final {
                     break;
 
                 case 10:
+                    System.out.println("Opción en desarrollo, vuelva pronto ;3");
+                    break;
+
+                case 11:
+                    System.out.println("Opción en desarrollo también, vuelva pronto ;3");
+                    break;
+
+                case 12:
+                    System.out.println("--- Grafo con Lista de Adyacencia ---");
+                    int verticesLista = leerEnteroMenu(sc, "Ingrese el número de vértices: ");
+                    while (verticesLista <= 0) {
+                        System.out.println("El número de vértices debe ser mayor que 0.");
+                        verticesLista = leerEnteroMenu(sc, "Ingrese el número de vértices: ");
+                    }
+                    System.out.println("Los vértices están numerados del 0 al " + (verticesLista - 1));
+                    int aristasLista = leerEnteroMenu(sc, "¿Cuántas aristas desea agregar? ");
+                    
+                    ArrayList<ArrayList<Integer>> grafoLista = crearGrafoLista(sc, verticesLista, aristasLista);
+                    
+                    System.out.println("\n--- Representación del grafo (Lista de Adyacencia) ---");
+                    for (int i = 0; i < grafoLista.size(); i++) {
+                        System.out.print("Vértice " + i + " -> ");
+                        if (grafoLista.get(i).isEmpty()) {
+                            System.out.print("(sin conexiones)");
+                        } else {
+                            for (Integer vecino : grafoLista.get(i)) {
+                                System.out.print(vecino + " ");
+                            }
+                        }
+                        System.out.println();
+                    }
+                    break;
+
+                case 13:
+                    System.out.println("--- Grafo con Matriz de Adyacencia ---");
+                    int verticesMatriz = leerEnteroMenu(sc, "Ingrese el número de vértices: ");
+                    while (verticesMatriz <= 0) {
+                        System.out.println("El número de vértices debe ser mayor que 0.");
+                        verticesMatriz = leerEnteroMenu(sc, "Ingrese el número de vértices: ");
+                    }
+                    System.out.println("Los vértices están numerados del 0 al " + (verticesMatriz - 1));
+                    int aristasMatriz = leerEnteroMenu(sc, "¿Cuántas aristas desea agregar? ");
+                    
+                    int[][] grafoMatriz = crearGrafoMatriz(sc, verticesMatriz, aristasMatriz);
+                    
+                    System.out.println("\n--- Matriz de Adyacencia ---");
+                    // Encabezado de columnas
+                    System.out.print("    ");
+                    for (int i = 0; i < verticesMatriz; i++) {
+                        System.out.printf("%3d ", i);
+                    }
+                    System.out.println();
+                    System.out.print("    ");
+                    for (int i = 0; i < verticesMatriz; i++) {
+                        System.out.print("----");
+                    }
+                    System.out.println();
+                    
+                    // Mostrar matriz
+                    for (int i = 0; i < verticesMatriz; i++) {
+                        System.out.printf("%2d | ", i);
+                        for (int j = 0; j < verticesMatriz; j++) {
+                            System.out.printf("%3d ", grafoMatriz[i][j]);
+                        }
+                        System.out.println();
+                    }
+                    
+                    // Mostrar conexiones
+                    System.out.println("\n--- Conexiones del grafo ---");
+                    for (int i = 0; i < verticesMatriz; i++) {
+                        System.out.print("Vértice " + i + " conectado con: ");
+                        boolean hayConexion = false;
+                        for (int j = 0; j < verticesMatriz; j++) {
+                            if (grafoMatriz[i][j] == 1) {
+                                System.out.print(j + " ");
+                                hayConexion = true;
+                            }
+                        }
+                        if (!hayConexion) {
+                            System.out.print("ninguno");
+                        }
+                        System.out.println();
+                    }
+                    break;
+
+                case 14:
                     System.out.println("Gracias por su tiempo, vuelva pronto.");
                     break;
 
@@ -406,7 +564,7 @@ public class Proyecto_final {
                     System.out.println("Esa opción no es válida.");
                     break;
             }
-        } while (opcion != 10);
+        } while (opcion != 14);
 
         sc.close();
     }
